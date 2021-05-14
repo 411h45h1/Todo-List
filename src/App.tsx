@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, useState } from 'react';
+import TodoTask from './components/TodoTask';
 import { Todo } from './interfaces';
 import './styles/App.scss';
 
@@ -6,11 +7,18 @@ const App: FC = () => {
   const [name, setName] = useState<string>("");
   const [todoList, setTodoList] = useState<Todo[]>([]);
  
-  const addTask = (): void => {
-    const newTask = { todoName: name };
-    setTodoList([...todoList, newTask]);
+  const addTodoItem = (): void => {
+    setTodoList([...todoList, { todoName: name }]);
     setName("");
   }
+
+  const removeTodoItem = (todoToBeDeleted: string): void => {
+    setTodoList(
+      todoList.filter((task) => {
+        return task.todoName !== todoToBeDeleted;
+      })
+    );
+  };
 
   return (
     <div className="appCont">
@@ -20,7 +28,7 @@ const App: FC = () => {
         </h1>
       </header>
       <div className="app">
-      <form className='form' >
+      <div className='form'  >
       <input
             type="text"
             placeholder="Task name"
@@ -29,11 +37,18 @@ const App: FC = () => {
             onChange={(event: ChangeEvent<HTMLInputElement>): void => setName(event.target.value)}
           />
       
-      <button onClick={addTask} type='submit' >Add Task</button>
+      <button onClick={addTodoItem} type='submit' style={{color:'white'}} >Add Task</button>
 
-      </form>
+      </div>
       <div className='listCont' >
-
+        <h2>
+          Stored List
+        </h2>
+        <div className='todos' >
+      {todoList.map((todo: Todo, key) => {
+        return <TodoTask key={key} todo={todo} removeTodoItem={removeTodoItem} />;
+      })}
+      </div>
       </div>
 
       </div>
