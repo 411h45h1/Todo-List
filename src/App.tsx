@@ -1,6 +1,17 @@
+import { ChangeEvent, FC, useState } from 'react';
+import { Todo } from './interfaces';
 import './styles/App.scss';
 
-function App() {
+const App: FC = () => {
+  const [name, setName] = useState<string>("");
+  const [todoList, setTodoList] = useState<Todo[]>([]);
+ 
+  const addTask = (): void => {
+    const newTask = { todoName: name };
+    setTodoList([...todoList, newTask]);
+    setName("");
+  }
+
   return (
     <div className="appCont">
       <header>
@@ -9,8 +20,21 @@ function App() {
         </h1>
       </header>
       <div className="app">
-      <div className='inputCont' ></div>
-      <div className='listCont' ></div>
+      <form className='form' >
+      <input
+            type="text"
+            placeholder="Task name"
+            name="taskName"
+            value={name}
+            onChange={(event: ChangeEvent<HTMLInputElement>): void => setName(event.target.value)}
+          />
+      
+      <button onClick={addTask} type='submit' >Add Task</button>
+
+      </form>
+      <div className='listCont' >
+
+      </div>
 
       </div>
     </div> 
